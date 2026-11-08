@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>MindEase — 10 Question Quiz (Precise Scoring)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f4f7fb; margin:0; padding:24px; color:#222; }
+    .container { max-width:760px; margin:24px auto; background:#fff; padding:20px 24px; border-radius:10px; box-shadow:0 6px 22px rgba(25,35,45,0.06); }
+    h1 { margin:0 0 8px; font-size:1.5rem; text-align:center; color:#0f1724; }
+    p.lead { text-align:center; margin:0 0 18px; color:#475569; }
+    .question { margin:16px 0; }
+    .question p { margin:0 0 8px; font-weight:600; }
+    .options label { display:block; margin:6px 0; cursor:pointer; padding:8px 10px; border-radius:6px; user-select:none; }
+    .options input { margin-right:10px; }
+    button { display:inline-block; background:#0b6cf6; color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:600; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    .result { margin-top:18px; padding:14px; border-radius:8px; background:#eef6ff; border-left:5px solid #0b6cf6; }
+    .metrics { font-family:monospace; margin-top:6px; color:#0b2239; }
+    ul.suggest { margin:8px 0 0 18px; color:#0b2239; }
+    .muted { color:#475569; font-size:.95rem; }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">MindEase — 10 Question Quiz</h1>
+    <form id="quizForm" autocomplete="off" novalidate>
+      <!-- Each question: top (1), middle (0), bottom (-1) -->
+      <div class="question">
+        <p>1. How often do you feel stressed?</p>
+        <div class="options">
+          <label><input type="radio" name="q1" value="1"> Rarely</label>
+          <label><input type="radio" name="q1" value="0"> Sometimes</label>
+          <label><input type="radio" name="q1" value="-1"> Very often</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>2. How well do you sleep at night?</p>
+        <div class="options">
+          <label><input type="radio" name="q2" value="1"> Very well</label>
+          <label><input type="radio" name="q2" value="0"> Okay</label>
+          <label><input type="radio" name="q2" value="-1"> Poorly</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>3. Do you exercise regularly?</p>
+        <div class="options">
+          <label><input type="radio" name="q3" value="1"> Yes</label>
+          <label><input type="radio" name="q3" value="0"> Sometimes</label>
+          <label><input type="radio" name="q3" value="-1"> No</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>4. How balanced is your daily diet?</p>
+        <div class="options">
+          <label><input type="radio" name="q4" value="1"> Very balanced</label>
+          <label><input type="radio" name="q4" value="0"> Somewhat balanced</label>
+          <label><input type="radio" name="q4" value="-1"> Not balanced</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>5. How often do you take breaks during work/study?</p>
+        <div class="options">
+          <label><input type="radio" name="q5" value="1"> Regularly</label>
+          <label><input type="radio" name="q5" value="0"> Occasionally</label>
+          <label><input type="radio" name="q5" value="-1"> Rarely</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>6. How strong is your social support system (friends/family)?</p>
+        <div class="options">
+          <label><input type="radio" name="q6" value="1"> Very strong</label>
+          <label><input type="radio" name="q6" value="0"> Moderate</label>
+          <label><input type="radio" name="q6" value="-1"> Weak</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>7. How often do you practice relaxation (meditation, deep breathing, etc.)?</p>
+        <div class="options">
+          <label><input type="radio" name="q7" value="1"> Daily</label>
+          <label><input type="radio" name="q7" value="0"> Occasionally</label>
+          <label><input type="radio" name="q7" value="-1"> Never</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>8. How often do you feel overwhelmed by tasks?</p>
+        <div class="options">
+          <label><input type="radio" name="q8" value="1"> Rarely</label>
+          <label><input type="radio" name="q8" value="0"> Sometimes</label>
+          <label><input type="radio" name="q8" value="-1"> Very often</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>9. Do you enjoy your daily activities/work?</p>
+        <div class="options">
+          <label><input type="radio" name="q9" value="1"> Yes, very much</label>
+          <label><input type="radio" name="q9" value="0"> Sometimes</label>
+          <label><input type="radio" name="q9" value="-1"> Not really</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <p>10. How often do you feel positive and motivated?</p>
+        <div class="options">
+          <label><input type="radio" name="q10" value="1"> Very often</label>
+          <label><input type="radio" name="q10" value="0"> Sometimes</label>
+          <label><input type="radio" name="q10" value="-1"> Rarely</label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;margin-top:12px;">
+        <button type="submit" id="submitBtn">Get Result</button>
+        <div class="muted" id="answeredCount">Answered: 0 / 10</div>
+      </div>
+    </form>
+
+    <div id="result" class="result" style="display:none;" aria-live="polite"></div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('quizForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const resultDiv = document.getElementById('result');
+      const answeredCountEl = document.getElementById('answeredCount');
+      const NUM_Q = 10;
+
+      // update answered count in real-time
+      form.addEventListener('change', () => {
+        let answered = 0;
+        for (let i = 1; i <= NUM_Q; i++) {
+          if (form['q' + i].value) {
+            // check if any radio in group is checked
+            const checked = Array.from(form['q' + i]).some(r => r.checked);
+            if (checked) answered++;
+          }
+        }
+        answeredCountEl.textContent = `Answered: ${answered} / ${NUM_Q}`;
+      });
+
+      // precise scoring and interpretation
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        // validate all answered
+        let answered = 0;
+        let rawScore = 0;
+        for (let i = 1; i <= NUM_Q; i++) {
+          const val = form['q' + i];
+          if (!val) continue;
+          const checked = Array.from(val).find(r => r.checked);
+          if (checked) {
+            answered++;
+            rawScore += parseFloat(checked.value);
+          }
+        }
+
+        if (answered !== NUM_Q) {
+          resultDiv.style.display = 'block';
+          resultDiv.innerHTML = `<strong>Please answer all ${NUM_Q} questions.</strong><div class="muted">Answered: ${answered} / ${NUM_Q}</div>`;
+          return;
+        }
+
+        // Calculations with precision
+        const normalized = rawScore / NUM_Q; // range -1 to +1
+        // percent maps raw (-NUM_Q..+NUM_Q) to 0..100
+        const percent = ((rawScore + NUM_Q) / (2 * NUM_Q)) * 100;
+
+        // round to two decimals for display
+        const rawFixed = rawScore.toFixed(2); // will show .00 for integer rawScore for consistency
+        const normalizedFixed = normalized.toFixed(2);
+        const percentFixed = percent.toFixed(2);
+
+        // Interpretation thresholds (percent)
+        let categoryTitle = '';
+        let categoryMessage = '';
+        let suggestions = [];
+
+        if (percent >= 75.0) {
+          categoryTitle = 'Very good — low stress';
+          categoryMessage = 'Your responses indicate strong wellbeing and balance.';
+          suggestions = ['Maintain current routines', 'Keep up regular sleep and exercise', 'Continue short daily relaxation practices'];
+        } else if (percent >= 55.0) {
+          categoryTitle = '✅Good — generally balanced';
+          categoryMessage = 'You are mostly balanced; small improvements could increase resilience.';
+          suggestions = ['Introduce brief daily breathing (5–10 min)', 'Ensure regular short breaks', 'Keep social connections active'];
+        } else if (percent >= 35.0) {
+          categoryTitle = '⚖️Moderate — some stress detected';
+          categoryMessage = 'You showed signs of moderate stress — consider consistent self-care steps.';
+          suggestions = ['Practice daily relaxation (10–15 min)', 'Review sleep routine and diet', 'Plan prioritized tasks and brief breaks'];
+        } else {
+          categoryTitle = '⚠️High stress — take action';
+          categoryMessage = 'Responses suggest elevated stress. Consider immediate support or structured changes.';
+          suggestions = ['Try guided relaxation or breathing exercises', 'Talk to a trusted friend/family member', 'Seek professional help if needed'];
+        }
+
+        // Build result HTML (precise metrics + interpretation)
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+          <div><strong>${categoryTitle}</strong></div>
+          <div class="muted" style="margin-top:6px;">${categoryMessage}</div>
+
+          <div class="metrics" style="margin-top:10px;">
+            Net score: ${rawFixed} (range -${NUM_Q} to +${NUM_Q}) • Normalized: ${normalizedFixed} • Wellbeing: ${percentFixed}%
+          </div>
+
+          <div style="margin-top:10px;"><strong>Personalized suggestions:</strong>
+            <ul class="suggest">
+              ${suggestions.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div style="margin-top:8px; font-size:0.92rem; color:#334155;">
+            <em>Calculation details:</em> raw sum of choices (1 / 0 / -1) across ${NUM_Q} questions. Normalized = raw / ${NUM_Q}. Percent maps normalized to 0–100.
+          </div>
+        `;
+      });
+    })();
+  </script>
+</body>
+</html>
